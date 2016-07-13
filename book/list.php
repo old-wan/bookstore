@@ -7,7 +7,7 @@
 
 
 
-	echo '<table border="1" width="1000">';
+	echo '<table border="1 " width="1000">';
 	echo '<caption><h3> 图书列表</h3></caption>';
 	echo '<tr>';
 		echo '<th>&nbsp</th>';
