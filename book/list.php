@@ -5,8 +5,6 @@
 	$sql= "SELECT id,bookname,publisher,author,price,ptime FROM books order by id";
 	$result=$pdo->query($sql); //执行添加语句
 
-
-
 	echo '<table border="1 " width="1000">';
 	echo '<caption><h3> 图书列表</h3></caption>';
 	echo '<tr>';
@@ -29,7 +27,7 @@
 		echo'<td>'.$author.'</td>';
 		echo'<td>￥'.number_format($price,2,".",".").'</td>';
 		echo'<td>'.date("Y-m-d H-i",$ptime).'</td>';
-		echo'<td><a href="mod.php?id='.$id.'">修改</a>/<a href="list.php?action=del&id='.$id.'">删除</a></td>';
+		echo'<td><a href="mod.php?action=mod&id='.$id.'">修改</a>/<a href="list.php?action=del&id='.$id.'">删除</a></td>';
 	echo '</tr>';		
    
 	}
@@ -37,8 +35,6 @@
 
 
 	echo'</table>';
-
-
 
 
 
