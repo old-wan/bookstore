@@ -1,7 +1,7 @@
 <?php
 	/** 
-		file: image.class.php 类名为Image
-		图像处理类，可以完成对各种类型的图像进行缩放、加图片水印和剪裁的操作。
+		*file: image.class.php 类名为Image
+		*图像处理类，可以完成对各种类型的图像进行缩放、加图片水印和剪裁的操作。
 	*/
 	class Image {
 		/* 图片保存的路径 */

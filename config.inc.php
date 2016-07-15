@@ -9,3 +9,4 @@
 
 	//分页显示数量
 	$num = 15;
+	$waterimg="php.gif";
