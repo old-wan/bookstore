@@ -8,7 +8,7 @@
 
 		if (!empty($result)){
 
-			list($id, $bookname, $author, $price, $pic, $detail)=$result -> fetch();
+			list($id, $bookname, $publisher,$author, $price, $pic, $detail)=$result -> fetch();
 		}else{
 
 			echo "没有对应的数据!<br>";
@@ -24,18 +24,16 @@
 			price='{$_POST['price']}',
 			pic='{$_POST['pic']}',
 			detail='{$_POST['detail']}'
-			WHERE id='{$_POST['id']}';
+			WHERE id='{$_POST['id']}'
 		 "; 
-
 
 		$result =$pdo->query($sql);
 
 		if ($result && isset($result)>0 ) {
 			echo "修改成功!<br>";
 		}else{
-			echo "修改失败<br>";
+			echo "修改失败!<br>";
 		}
-
 	}
 ?>
 	<h3>修改图书</h3>
