@@ -27,7 +27,8 @@
 			$pic = upload('pic');
 
 			//删除照片
-
+			unlink("../uploads/{$_POST['srcimg']}");
+			unlink("../uploads/th_{$_POST['srcimg']}");
 
 
 		//全部字段都要修改
