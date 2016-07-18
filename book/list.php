@@ -4,6 +4,47 @@
 	include "../classes/page.class.php";
 
 
+	if (isset($_GET['action']) && $_GET['action']=='ser') {
+		$tmp = !empty($_POST) ? $_POST : $_GET;
+		$whr=array();
+		$args ="";
+
+		//如果bookname不为空，说明想搜索书名
+		if(!empty($tmp['bookname'])) {
+			$whr[] = "bookname like '%{$tmp['bookname']}%'";
+			$args .= "&bookname={$tmp['bookname']}";
+
+		}
+
+		//如果author不为空，说明想搜索作者
+		if(!empty($tmp['author'])) {
+			$whr[] = "author like '%{$tmp['author']}%'";
+			$args .= "&author={$tmp['author']}";
+		}
+
+		//如果minprice不为空，说明想搜索价格大于多少的
+		if(!empty($tmp['minprice'])) {
+			$whr[] = "price >= '{$tmp['minprice']}'";
+			$args .= "&minprice={$tmp['minprice']}";
+
+		}
+
+		//如果maxprice不为空，说明想搜索价格小于多少的图书
+		if(!empty($tmp['maxprice'])) {
+			$whr[] = "price <= '{$tmp['maxprice']}'";
+			$args .= "&maxprice={$tmp['maxprice']}";
+
+		}
+		
+		if(!empty($whr)) {
+			$where = " where ".implode(" and ", $whr);
+		} else {
+			$where = "";
+		}
+
+	}
+
+
 	//用户是否有动作
 	 if(isset($_GET['action'])){
 	 	// 删除图书的动作
@@ -36,7 +77,7 @@
 
 	//分页 开始
 	//获取总记录数
-	$sql = "SELECT count(*) as total FROM books";
+	$sql = "SELECT count(*) as total FROM books {$where}";
 	$result=$pdo->query($sql); //执行添加语句
 
 	$data = $result->fetchColumn(); //获取数据总数
@@ -44,22 +85,21 @@
 	// $data = mysql_fetch_assoc($result);  //从结果集中取得一行作为关联数组
 
 	//创建分页对象
-	$page = new Page($data, $num);
+	$page = new Page($data, $num,$args);
 
 
-	$sql= "SELECT id,bookname,publisher,author,price,ptime FROM books order by id {$page->limit}";
+	$sql= "SELECT id,bookname,publisher,author,price,ptime FROM books {$where} order by id {$page->limit}";
 	$result=$pdo->query($sql); //执行添加语句
 
 	/*搜索表单开始*/
 	echo "搜索图书:";
- 	echo'<from action="list.php" method="psot">';
-	echo '按书名：<input type="text" name="bookname" size=8>&nbsp;&nbsp;';
-	echo '按作者：<input type="text" name="author" size=8>&nbsp;&nbsp;';
-	echo '按价格：<input type="text" size="8" name="minprice">&nbsp;&nbsp;';
-	echo '按价格：<input type="text" size="8" name="maxprice">&nbsp;&nbsp;';
+ 	echo '<form action="list.php?action=ser" method="post">';
+	echo '按书名：<input type="text" name="bookname" size=8 value="'.$tmp['bookname'].'" >&nbsp;&nbsp;';
+	echo '按作者：<input type="text" name="author" size=8 value="'.$tmp['author'].'">&nbsp;&nbsp;';
+	echo '按价格：<input type="text" size="8" name="minprice" value="'.$tmp['minprice'].'">&nbsp;&nbsp;';
+	echo '按价格：<input type="text" size="8" name="maxprice" value="'.$tmp['maxprice'].'">&nbsp;&nbsp;';
 	echo '<input type="submit" name="sersubmit" value ="搜索">';
-	echo '</from>';
-
+	echo '</form>';
 
 
 	echo '<form action="list.php?action=del&page='.$page->page.'" method="post" onsubmit ="return confirm(\'你确定要删除这些图书吗？\')">';
@@ -85,7 +125,7 @@
 			echo'<td>'.$author.'</td>';
 			echo'<td>￥'.number_format($price,2,".",".").'</td>';
 			echo'<td>'.date("Y-m-d H-i",$ptime).'</td>';
-			echo'<td><a href="mod.php?action=mod&id='.$id.'">修改</a>/<a  onclick="return confirm(\'你确定要删除《'.$bookname.'》这个图书吗？\')" href="list.php?action=del&page='.$page->page.'&id='.$id.'">删除</a></td>';
+			echo'<td><a href="mod.php?action=mod&id='.$id.'">修改</a>/<a  onclick="return confirm(\'你确定要删除《'.$bookname.'》这个图书吗？\')" href="list.php?action=del'.$args.'&page='.$page->page.'&id='.$id.'">删除</a></td>';
 		echo '</tr>';		
 	   
 		}
